@@ -1,5 +1,5 @@
 __author__ = 'silencedut'
-import urllib2
+import urllib
 import json
 from bs4 import BeautifulSoup
 import lxml
@@ -17,8 +17,8 @@ class GameDate(object):
 
     def get_perday_games(self,date):
         self.gamedate_url=self.gamedate_url%date
-        req = urllib2.Request(self.gamedate_url, headers = self.headers)
-        gamesresponse = urllib2.urlopen(req)
+        req = urllib.Request(self.gamedate_url, headers = self.headers)
+        gamesresponse = urllib.urlopen(req)
         gamespage = gamesresponse.read()
         unicodepage = gamespage.decode("utf-8")
         soup = BeautifulSoup(unicodepage,"lxml")

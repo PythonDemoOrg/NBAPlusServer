@@ -11,8 +11,6 @@ from spider import news
 from spider import games
 from util import api
 
-
-
 @app.route('/backend/cron/stat/update', methods=['GET'])
 def statupdate():
     allstat=sinadata.getstat()
@@ -38,7 +36,6 @@ def before_request():
     sinadata=statistics.Statistics()
     newsdata= news.News()
     gamesdate=games.GameDate()
-
 
 @app.errorhandler(404)
 def not_found(error):
@@ -79,4 +76,5 @@ def get_gamesdate(date):
     games=gamesdate.get_perday_games(date)
     return games
 
-
+if __name__ == '__main__':
+    app.run(debug=True)

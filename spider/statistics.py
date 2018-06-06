@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
+from imp import reload
+
 __author__ = 'silencedut'
-import urllib2
+import urllib
+import urllib.request
 import json
 from bs4 import BeautifulSoup
 import datetime
 from sqlutils import basesqlutil
 from util import third_party_api
-# import sys
-# reload(sys)
+import sys
+reload(sys)
 # sys.setdefaultencoding('utf8')
 class Statistics(object):
     def __init__(self):
@@ -56,8 +59,9 @@ class Statistics(object):
 
     def getdata(self,statkind):
         self.sina_url = third_party_api.statisticsapi%statkind;
-        req = urllib2.Request(self.sina_url, headers = self.headers)
-        statresponse = urllib2.urlopen(req)
+        # req = urllib.Request(self.sina_url, headers = self.headers)
+        # statresponse = urllib.urlopen(req)
+        statresponse = urllib.request.urlopen(self.sina_url)
         statpage = statresponse.read()
         #encode的作用是将unicode编码转换成其他编码的字符串
         #decode的作用是将其他编码的字符串转换成unicode编码
@@ -73,8 +77,9 @@ class Statistics(object):
 
     def getsort(self):
         self.sina_url = third_party_api.teamsortapi
-        req = urllib2.Request(self.sina_url, headers = self.headers)
-        statresponse = urllib2.urlopen(req)
+        #req = urllib.Request(self.sina_url, headers = self.headers)
+        #statresponse = urllib.urlopen(req)
+        statresponse = urllib.request.urlopen(self.sina_url)
         statpage = statresponse.read()
         #encode的作用是将unicode编码转换成其他编码的字符串
         #decode的作用是将其他编码的字符串转换成unicode编码
@@ -97,7 +102,8 @@ class Statistics(object):
         statkinds =('points','reb','assi','ste','blk','to','goal','three','free')
         for statkind in statkinds:
             perdata=self.getdata(statkind)
-            jsondata=json.dumps(perdata).decode("unicode-escape")
+            # jsondata=json.dumps(perdata).decode("unicode-escape")
+            jsondata = json.dumps(perdata)
             allstat.append(jsondata)
         basesqlutil.stat_insertsql(allstat)
         #basesqlutil.stat_insertSql(allstat,datetime.datetime.now().strftime("%Y%m%d"))

@@ -1,26 +1,38 @@
 # -*- coding: utf-8 -*-
+from imp import reload
+
 __author__ = 'silencedut'
-import MySQLdb
+# import MySQLdb
+import pymysql
 import json
 from flask import g
-from sae.const import (MYSQL_HOST, MYSQL_HOST_S,
-    MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
-)
+# from sae.const import (MYSQL_HOST, MYSQL_HOST_S,
+#     MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
+# )
 import sys
 reload(sys)
-sys.setdefaultencoding('utf8')
+# sys.setdefaultencoding('utf8')
 def connect():
     status=0
     try:
-        g.db = MySQLdb.connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS,
-                           MYSQL_DB, port=int(MYSQL_PORT))
+        # g.db = MySQLdb.connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS,
+        #                    MYSQL_DB, port=int(MYSQL_PORT))
+
+        # localhost - 127.0.0.1
+        g.db = pymysql.connect(
+            host='localhost',
+            port=3306,
+            user='huangweiqi',
+            passwd='123456',
+            db='nba_plus_server',
+            charset='utf8')
         g.db.ping(True)
         dbc=g.db.cursor()
         g.db.set_character_set('utf8')
         dbc.execute('SET NAMES utf8;')
         dbc.execute('SET CHARACTER SET utf8;')
         dbc.execute('SET character_set_connection=utf8;')
-    except Exception,e:
+    except Exception as e:
         status=1
     return status
 
@@ -103,6 +115,13 @@ def teamsort_insertsql(teamsort):
     c.execute(sql)
 
 def stat_insertsql(allstat):
+    g.db = pymysql.connect(
+        host='localhost',
+        port=3306,
+        user='huangweiqi',
+        passwd='123456',
+        db='nba_plus_server',
+        charset='utf8')
     c = g.db.cursor()
     delete_sql('nbastat')
     sql ="insert into nbastat VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (allstat[0],allstat[1],allstat[2],allstat[3],allstat[4],allstat[5],allstat[6],allstat[7],allstat[8])

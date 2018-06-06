@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'silencedut'
-import urllib2
+import urllib
+import urllib.request
 import json
 import datetime
 from sqlutils import basesqlutil
@@ -40,7 +41,8 @@ class News(object):
 
     def setblogid(self,bloglist):
         for index in range(len(bloglist)) :
-            blogItem=json.dumps(bloglist[index]).decode("unicode-escape")
+            # blogItem=json.dumps(bloglist[index]).decode("unicode-escape")
+            blogItem = json.dumps(bloglist[index])
             if(bloglist[index]['putdate']!=1435619291000) :
                 try:
                     basesqlutil.news_insert_sql('blog',str(bloglist[index]['articleId']),blogItem,str(bloglist[index]['putdate']))
@@ -49,23 +51,25 @@ class News(object):
             print(blogItem)
 
     def getperblog(self):
-        req = urllib2.Request(self.blog_url, headers = self.headers)
-        response = urllib2.urlopen(req)
+        # req = urllib.Request(self.blog_url, headers = self.headers)
+        # response = urllib.urlopen(req)
+        response = urllib.request.urlopen(self.blog_url)
         blog = json.loads(response.read())
         # blog=self.save_per_articlecontent(blog)
         return blog
 
     def getpernews(self):
-
-        req = urllib2.Request(self.news_url, headers = self.headers)
-        response = urllib2.urlopen(req)
+        # req = urllib.Request(self.news_url, headers = self.headers)
+        # response = urllib.urlopen(req)
+        response = urllib.request.urlopen(self.news_url)
         news = json.loads(response.read())
         news=news['articleList']
         imagenews=[]
         for pernews in news :
             detile_url=pernews['articleUrl']
-            req = urllib2.Request(detile_url, headers = self.headers)
-            response = urllib2.urlopen(req)
+            # req = urllib.Request(detile_url, headers = self.headers)
+            # response = urllib.urlopen(req)
+            response = urllib.request.urlopen(detile_url)
             newsdetile = json.loads(response.read())
             imagemap=newsdetile['articleMediaMap']
             if(len(imagemap)>2) :
@@ -81,8 +85,8 @@ class News(object):
         for pernews in news :
             detile_url=pernews['articleUrl']
             newsid=pernews['articleId']
-            req = urllib2.Request(detile_url, headers = self.headers)
-            response = urllib2.urlopen(req)
+            req = urllib.Request(detile_url, headers = self.headers)
+            response = urllib.urlopen(req)
             articlecontent={}
             articlecontent['content']=json.loads(response.read())['content']
             try:
