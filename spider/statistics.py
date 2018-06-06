@@ -12,6 +12,24 @@ from util import third_party_api
 import sys
 reload(sys)
 # sys.setdefaultencoding('utf8')
+
+import logging
+# 获取logger对象，设置日志级别
+logger = logging.getLogger(__name__)
+logger.setLevel(level=logging.INFO)
+
+# 获取文件处理器，并设置级别
+handler = logging.FileHandler("./logs/log.txt")
+# handler = logging.FileHandler("./logs/log.csv")
+handler.setLevel(logging.INFO)
+
+# 获取并设置文件处理器的日志格式
+formatter = logging.Formatter('%(asctime)s,%(name)s,%(levelname)s,%(message)s')
+handler.setFormatter(formatter)
+
+# 设置日志处理器
+logger.addHandler(handler)
+
 class Statistics(object):
     def __init__(self):
         self.sina_url =third_party_api.statisticsapi
@@ -104,6 +122,7 @@ class Statistics(object):
             perdata=self.getdata(statkind)
             # jsondata=json.dumps(perdata).decode("unicode-escape")
             jsondata = json.dumps(perdata)
+            logger.info("jsondata = "+jsondata)
             allstat.append(jsondata)
         basesqlutil.stat_insertsql(allstat)
         #basesqlutil.stat_insertSql(allstat,datetime.datetime.now().strftime("%Y%m%d"))

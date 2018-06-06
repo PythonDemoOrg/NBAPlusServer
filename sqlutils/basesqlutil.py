@@ -124,7 +124,7 @@ def stat_insertsql(allstat):
         charset='utf8')
     c = g.db.cursor()
     delete_sql('nbastat')
-    sql ="insert into nbastat VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (allstat[0],allstat[1],allstat[2],allstat[3],allstat[4],allstat[5],allstat[6],allstat[7],allstat[8])
+    sql ="insert into nbastat VALUES ('%d', '%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (1, allstat[0],allstat[1],allstat[2],allstat[3],allstat[4],allstat[5],allstat[6],allstat[7],allstat[8])
     c.execute(sql)
 
 def delete_sql(table_name):
